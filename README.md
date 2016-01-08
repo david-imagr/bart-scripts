@@ -1,5 +1,5 @@
 # bart-scripts
 Scripts for OSU computing server
 
-## [install_torch](install_torch/README.md)
+## [install_torch](install_torch/)
 Install Torch on the OSU computing server
