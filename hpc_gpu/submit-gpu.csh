@@ -15,7 +15,7 @@
 #$ -q gpu
 
 # activate Torch
-setenv torchpath /scratch/cluster-share/lamm-gpu/software/torch
+setenv torchpath /path/to/torch/
 source $torchpath/install/bin/torch-activate-csh
 
 # see where the job is being run
