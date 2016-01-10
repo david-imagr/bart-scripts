@@ -5,9 +5,17 @@
 # MAKE SURE YOU ARE NOT OVERWRITING SOMEONE ELSE'S DIRECTORY
 readonly TORCHDIR=/scratch/software/torch7
 
+# path to where cuda is installed
+readonly CUDAPATH=/scratch/cuda
+
 # other global variables
 readonly CUSTOMDIR=$TORCHDIR/custom
 readonly THISDIR=`pwd`
+
+initialize_environment() {
+	export LD_LIBRARY_PATH=$CUDAPATH/lib64:$LD_LIBRARY_PATH
+	export PATH=$CUDAPATH/bin:$PATH
+}
 
 install_torch() {
 	# install torch
@@ -23,7 +31,11 @@ install_torch() {
 
 activate_torch() {
 	# activate torch - only for this script's session
-	. $TORCHDIR/install/bin/torch-activate
+	if ! . $TORCHDIR/install/bin/torch-activate
+	then
+		echo "Unable to activate torch."
+		exit 1
+	fi
 }
 
 install_display() {
@@ -108,6 +120,13 @@ create_install_csh_file() {
 	activatefile=$installdir/torch-activate
 	cshactivatefile=$installdir/torch-activate-csh
 
+	if [ ! -f $activatefile ]
+	then
+		echo "torch-activate file not found!"
+		echo "Torch probably did not install completely."
+		exit 1
+	fi
+
 	rm -f $cshactivatefile
 	cp $activatefile $installdir/tmp
 	cd $installdir
@@ -145,6 +164,7 @@ grant_all_access() {
 
 main() {
 	# install torch
+	initialize_environment
 	install_torch
 	create_install_csh_file
 	activate_torch
