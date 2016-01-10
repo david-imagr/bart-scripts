@@ -29,7 +29,7 @@ luarocks list
 
 echo "Torch-Test"
 
-# Run first.csh
+# run torch script
 echo "===================="
 th th_script.lua
 echo "===================="
