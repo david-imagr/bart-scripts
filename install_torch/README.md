@@ -13,9 +13,13 @@ Change the `TORCHDIR` variable to another location if you want to
 install for yourself for example.
 
 ### Activation
-To activate Torch, add the following to your `~/.bashrc` (or `~/.cshrc`) file:
+To activate Torch, add the following to your `~/.bashrc` file:
 
 `. /scratch/software/torch7/install/bin/torch-activate`
+
+Or add the following to your `~/.cshrc` file:
+
+`source /scratch/software/torch7/install/bin/torch-activate-csh`
 
 If you installed it somewhere else, change the line appropriately.
 
