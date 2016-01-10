@@ -11,6 +11,8 @@ readonly THISDIR=`pwd`
 
 install_torch() {
 	# install torch
+	rm -rf $TORCHDIR
+	mkdir -p $TORCHDIR
 	git clone https://github.com/torch/distro.git $TORCHDIR --recursive
 	cd $TORCHDIR
 	# use a specific commit; comment out to use latest
@@ -28,6 +30,7 @@ install_display() {
 	local displayfolder='display'
 
 	# install display package manually (luarocks install version is older)
+	rm -rf $CUSTOMDIR/$displayfolder
 	git clone https://github.com/szym/display.git $CUSTOMDIR/$displayfolder
 	cd $CUSTOMDIR/$displayfolder
 	# use a specific commit; comment out to use latest
@@ -41,27 +44,30 @@ install_libjpeg() {
 	local tarfile='jpegsrc.v9a.tar.gz'
 
 	# install libjpeg manually
+	rm -rf $CUSTOMDIR/$libjpegfolder
 	wget http://www.ijg.org/files/jpegsrc.v9a.tar.gz -O $CUSTOMDIR/$tarfile
 	tar -zxvf $CUSTOMDIR/$tarfile -C $CUSTOMDIR
 	cd $CUSTOMDIR/$libjpegfolder
-	./configure --prefix=$CUSTOMDIR/$libjpegfolder/build && make && make install
+	if ! ( ./configure --prefix=$CUSTOMDIR/$libjpegfolder/build && make && make install )
+	then
+		echo "Error encountered trying to install libjpeg"
+		exit 1
+	fi
 	cd -
 }
 
 apply_CMakeList_patch() {
 	local imagefolder=$1
 	local libjpegfolder=$2
-
-	local jpeg_library=$CUSTOMDIR/$libjpegfolder/build/lib/libjpeg.so
-	local jpeg_include_dir=$CUSTOMDIR/$libjpegfolder/build/include
+	local patchfile='CMakeLists.txt.patch'
+	local build_dir=$CUSTOMDIR/$libjpegfolder/build
 
 	# overwrite CMakeLists.txt to use custom libjpeg installation
 	rm -f $CUSTOMDIR/$imagefolder/CMakeLists.txt
-	cp $THISDIR/CMakeLists.txt.patch $CUSTOMDIR/$imagefolder/CMakeLists.txt
+	echo "Applying CMakeLists patch for image package..."
+	cp $THISDIR/$patchfile $CUSTOMDIR/$imagefolder/CMakeLists.txt
 	cd $CUSTOMDIR/$imagefolder
-	sed "57s|.*|SET(JPEG_LIBRARY ${jpeg_library})|" CMakeLists.txt > tmp
-	sed "58s|.*|SET(JPEG_INCLUDE_DIR ${jpeg_include_dir})|" tmp > CMakeLists.txt
-	rm -f tmp
+	sed -i "s|INSERT_PREFIX_HERE|${build_dir}|" CMakeLists.txt
 	cd -
 }
 
@@ -76,6 +82,7 @@ install_image() {
 	luarocks remove --force image
 
 	# reinstall image package manually
+	rm -rf $CUSTOMDIR/$imagefolder
 	git clone https://github.com/torch/image.git $CUSTOMDIR/$imagefolder
 	cd $CUSTOMDIR/$imagefolder
 	# use a specific commit; comment out to use latest
@@ -85,7 +92,50 @@ install_image() {
 	apply_CMakeList_patch $imagefolder $libjpegfolder
 
 	# build and install
-	luarocks make image-1.1.alpha-0.rockspec
+	if ! luarocks make image-1.1.alpha-0.rockspec
+	then
+		echo "Error encountered trying to install image"
+		exit 1
+	fi
+
+	# run test
+	th -e "require 'image'.test()"
+	cd -
+}
+
+create_install_csh_file() {
+	installdir=$TORCHDIR/install/bin
+	activatefile=$installdir/torch-activate
+	cshactivatefile=$installdir/torch-activate-csh
+
+	rm -f $cshactivatefile
+	cp $activatefile $installdir/tmp
+	cd $installdir
+	sed -i 's/export //g' tmp
+
+	while read -r line
+	do
+		IFS='=' read -a lineAsArray <<< "$line"
+		local variable=${lineAsArray[0]}
+		local value=${lineAsArray[1]}
+
+		IFS=':' read -a lineAsArray <<< "$value"
+		local path=${lineAsArray[0]}
+		local other=${lineAsArray[1]}
+
+		if [ -z "$other" ]
+		then
+			echo "setenv ${variable} ${value}" >> $cshactivatefile
+		else
+			echo 'if (${?'"${variable}"'}) then' >> $cshactivatefile
+			echo "	setenv ${variable} ${value}" >> $cshactivatefile
+			echo 'else' >> $cshactivatefile
+			echo "	setenv ${variable} ${path}" >> $cshactivatefile
+			echo 'endif' >> $cshactivatefile
+		fi
+	done < tmp
+
+	rm -f tmp
 	cd -
 }
 
@@ -95,15 +145,14 @@ grant_all_access() {
 
 main() {
 	# install torch
-	rm -rf $TORCHDIR
-	mkdir -p $TORCHDIR
 	install_torch
+	create_install_csh_file
 	activate_torch
 
 	# install packages and dependencies
 	mkdir -p $CUSTOMDIR
-	install_display
 	install_image
+	install_display
 	luarocks install mobdebug
 
 	# grant permission for everyone
@@ -112,8 +161,12 @@ main() {
 	echo
 	echo
 	echo "Installation complete."
-	echo "You will need to add the following to the end of your .bashrc or .cshrc script:"
+	echo "You will need to add the following to the end of your .bashrc script:"
 	echo
 	echo "	. ${TORCHDIR}/install/bin/torch-activate"
+	echo
+	echo "Or for .cshrc script:"
+	echo
+	echo "	source ${TORCHDIR}/install/bin/torch-activate-csh"
 }
 main
