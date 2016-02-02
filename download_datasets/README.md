@@ -8,5 +8,5 @@ installed again.
 `cd` into this directory and run the appropriate script to 
 download that dataset.
 
-`./download_coco.sh` downloads [MS COCO dataset](http://mscoco.org/).
-`./download_lsun.sh` downloads [LSUN scene classification dataset](http://lsun.cs.princeton.edu/#classification).
+- `./download_coco.sh` downloads [MS COCO dataset](http://mscoco.org/).
+- `./download_lsun.sh` downloads [LSUN scene classification dataset](http://lsun.cs.princeton.edu/#classification).

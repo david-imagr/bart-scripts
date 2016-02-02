@@ -175,6 +175,7 @@ main() {
 	install_display
 	luarocks install rnn
 	luarocks install mobdebug
+	luarocks install nninit
 
 	# grant permission for everyone
 	grant_all_access
