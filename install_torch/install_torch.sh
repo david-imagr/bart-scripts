@@ -173,6 +173,7 @@ main() {
 	mkdir -p $CUSTOMDIR
 	install_image
 	install_display
+	luarocks install rnn
 	luarocks install mobdebug
 
 	# grant permission for everyone
