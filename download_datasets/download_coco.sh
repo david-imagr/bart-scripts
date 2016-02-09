@@ -11,7 +11,7 @@ readonly COCODIR="coco"
 readonly IMAGESDIR="images"
 readonly ANNOTATIONSDIR="annotations"
 readonly VIRTUALENV_DIR="venv"
-readonly PYTHON_BIN="/usr/bin/python2.7"
+readonly PYTHON_BIN="python2.7"
 
 create_virtualenv() {
 	cd $DATADIR/$COCODIR

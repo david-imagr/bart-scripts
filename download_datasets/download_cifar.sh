@@ -9,7 +9,7 @@ readonly DATADIR="/scratch/datasets"
 readonly SCRIPT_NAME=$0
 readonly CIFAR10DIR="cifar-10"
 readonly CIFAR100DIR="cifar-100"
-readonly PYTHON_BIN="/usr/bin/python2.7"
+readonly PYTHON_BIN="python2.7"
 
 setup_script() {
 	mkdir $DATADIR/$CIFAR10DIR
