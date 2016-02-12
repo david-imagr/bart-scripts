@@ -9,7 +9,6 @@ readonly DATADIR="/scratch/datasets"
 readonly SCRIPT_NAME=$0
 readonly CIFAR10DIR="cifar-10"
 readonly CIFAR100DIR="cifar-100"
-readonly PYTHON_BIN="python2.7"
 
 setup_script() {
 	mkdir $DATADIR/$CIFAR10DIR
@@ -28,7 +27,7 @@ download_cifar10() {
 	wget https://www.cs.toronto.edu/~kriz/cifar-10-matlab.tar.gz -O $matlabtar
 	wget https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz -O $binarytar
 
-	# extract everything: 
+	# extract everything:
 	tar -zxvf $pythontar
 	tar -zxvf $matlabtar
 	tar -zxvf $binarytar
@@ -53,7 +52,7 @@ download_cifar100() {
 	wget https://www.cs.toronto.edu/~kriz/cifar-100-matlab.tar.gz -O $matlabtar
 	wget https://www.cs.toronto.edu/~kriz/cifar-100-binary.tar.gz -O $binarytar
 
-	# extract everything: 
+	# extract everything:
 	tar -zxvf $pythontar
 	tar -zxvf $matlabtar
 	tar -zxvf $binarytar
