@@ -48,7 +48,7 @@ download_devkit() {
 download_dataset() {
 	local tarfile="dataset.tar.gz"
 
-	cd $DATADIR/$ILSVRC2015DIR
+	cd $DATADIR
 
 	# download everything:
 	wget $DATASET_URL -O $tarfile
