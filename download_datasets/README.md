@@ -19,6 +19,8 @@ and development kit for image classification.
 [LSUN scene classification dataset](http://lsun.cs.princeton.edu/#classification).
 - `./download_CUB-200-2011.sh` downloads
 [Caltech-UCSD Birds-200-2011 dataset](http://www.vision.caltech.edu/visipedia/CUB-200-2011.html)
+- `./download_SUNRGB.sh` downloads
+[SUN RGB-D dataset](http://rgbd.cs.princeton.edu/)
 
 ### Contributions
 Please feel free to add your own download scripts for other datasets.
