@@ -14,7 +14,7 @@ readonly DATASET_URL="http://rgbd.cs.princeton.edu/data/SUNRGBD.zip"
 readonly TOOLBOX_URL="http://rgbd.cs.princeton.edu/data/SUNRGBDtoolbox.zip"
 
 # other global variables
-readonly SUNRGB_DIR="SUNRGB_v2"
+readonly SUNRGB_DIR="SUNRGB"
 
 download_toolbox() {
 	local zipfile="SUNRGBDtoolbox.zip"
