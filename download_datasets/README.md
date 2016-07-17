@@ -21,6 +21,8 @@ and development kit for image classification.
 [Caltech-UCSD Birds-200-2011 dataset](http://www.vision.caltech.edu/visipedia/CUB-200-2011.html)
 - `./download_SUNRGB.sh` downloads
 [SUN RGB-D dataset](http://rgbd.cs.princeton.edu/)
+- `./download_UTE.sh` downloads
+[UT Egocentric dataset](http://vision.cs.utexas.edu/projects/egocentric/download_register.html)
 
 ### Contributions
 Please feel free to add your own download scripts for other datasets.
