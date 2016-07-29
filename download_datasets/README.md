@@ -23,6 +23,8 @@ and development kit for image classification.
 [SUN RGB-D dataset](http://rgbd.cs.princeton.edu/)
 - `./download_UTE.sh` downloads
 [UT Egocentric dataset](http://vision.cs.utexas.edu/projects/egocentric/download_register.html)
+- `./download_ADL.sh` downloads
+[Activites of Daily Living dataset](http://people.csail.mit.edu/hpirsiav/codes/ADLdataset/adl.html)
 
 ### Contributions
 Please feel free to add your own download scripts for other datasets.
